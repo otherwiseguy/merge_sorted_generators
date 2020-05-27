@@ -27,36 +27,33 @@ def merge_union(*sorted_gen):
 
 
 def merge_intersection(*sorted_gens):
-    cut_off = None
+    try:
+        cut_off = next(sorted_gens[0])
+        matches = 1
+    except StopIteration:
+        return  # The can't all match if one is empty
     while True:
         for gen in sorted_gens:
-            if cut_off is None:
+            while True:
                 try:
-                    cut_off = next(gen)
-                    matches = 1
+                    val = next(gen)
                 except StopIteration:
-                    return # Can't match any of the rest if one empty
+                    return
+                if val >= cut_off:
+                    break
+            if  val != cut_off:
+                cut_off = val
+                matches = 1
             else:
-                while True:
-                    try:
-                        val = next(gen)
-                    except StopIteration:
-                        return
-                    if val >= cut_off:
-                        break
-                if  val != cut_off:
-                    cut_off = val
-                    matches = 1
-                else:
-                    matches += 1
+                matches += 1
             if matches == len(sorted_gens):
                 yield val
 
 
 a = iter(range(0, 6))
 b = iter(range(4, 7))
-c = iter(range(5, 6))
-print(list(merge_union(a, b, c)))
+c = iter(range(3, 6))
+print(list(merge_intersection(a, b, c)))
 #print(list(merge_unique(a, b, c)))
 #print(list(merge_unique(iter([]))))
 #print(list(merge_unique(iter([1, 2]))))
