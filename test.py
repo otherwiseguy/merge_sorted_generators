@@ -2,7 +2,7 @@
 EMPTY = object()
 
 
-def merge_unique(*sorted_gen):
+def merge_union(*sorted_gen):
     """Iterate over sorted generators, yielding the next unique value"""
 
     buckets = {gen: EMPTY for gen in sorted_gen}
@@ -26,7 +26,7 @@ def merge_unique(*sorted_gen):
         yield val
 
 
-def merge_union(*sorted_gens):
+def merge_intersection(*sorted_gens):
     cut_off = None
     while True:
         for gen in sorted_gens:
